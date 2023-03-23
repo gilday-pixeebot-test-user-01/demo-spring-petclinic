@@ -1,6 +1,7 @@
 package org.springframework.samples.petclinic.records;
 
 import java.io.InputStream;
+import java.util.zip.ZipInputStream;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import org.springframework.stereotype.Controller;
@@ -11,8 +12,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 class RecordsTransferController {
 
 	@PostMapping("/records-transfers")
-	public NewRecordModel newRecordsTransfer(@RequestBody InputStream body) {
-		final String id = readRecordId(body);
+	public NewRecordModel newRecordsTransfer(@RequestBody InputStream body) throws java.io.IOException {
+		final String id;
+		try (var is = new ZipInputStream(body)) {
+			id = readRecordId(is);
+		}
 		return new NewRecordModel(id);
 	}
 
