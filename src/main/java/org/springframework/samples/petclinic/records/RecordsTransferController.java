@@ -1,6 +1,7 @@
 package org.springframework.samples.petclinic.records;
 
 import static io.github.pixee.security.XMLInputFactorySecurity.hardenFactory;
+import io.github.pixee.security.ZipSecurity;
 import java.io.InputStream;
 import java.util.zip.ZipInputStream;
 import javax.xml.stream.XMLInputFactory;
@@ -15,7 +16,7 @@ class RecordsTransferController {
 	@PostMapping("/records-transfers")
 	public NewRecordModel newRecordsTransfer(@RequestBody InputStream body) throws java.io.IOException {
 		final String id;
-		try (var is = new ZipInputStream(body)) {
+		try (var is = ZipSecurity.createHardenedInputStream(body)) {
 			id = readRecordId(is);
 		}
 		return new NewRecordModel(id);
