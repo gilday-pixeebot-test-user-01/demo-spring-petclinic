@@ -1,5 +1,6 @@
 package org.springframework.samples.petclinic.records;
 
+import static io.github.pixee.security.XMLInputFactorySecurity.hardenFactory;
 import java.io.InputStream;
 import java.util.zip.ZipInputStream;
 import javax.xml.stream.XMLInputFactory;
@@ -21,7 +22,7 @@ class RecordsTransferController {
 	}
 
 	private String readRecordId(final InputStream is) {
-		final var factory = XMLInputFactory.newFactory();
+		final var factory = hardenFactory(XMLInputFactory.newFactory());
 		try {
 			final var xmlEventReader = factory.createXMLEventReader(is);
 			while (xmlEventReader.hasNext()) {
